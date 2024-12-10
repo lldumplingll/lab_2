@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Управление пользователями</h1>
+    <div class="container">
+        <h2>Создать пользователя</h2>
+        <div class="form-group">
+            <label for="create-username">Имя пользователя</label>
+            <input type="text" id="create-username" placeholder="Введите имя пользователя">
+        </div>
+        <div class="form-group">
+            <label for="create-email">Email</label>
+            <input type="email" id="create-email" placeholder="Введите email">
+        </div>
+        <div class="form-group">
+            <label for="create-fullname">Полное имя</label>
+            <input type="text" id="create-fullname" placeholder="Введите полное имя">
+        </div>
+        <div class="form-group">
+            <label for="create-password">Пароль</label>
+            <input type="password" id="create-password" placeholder="Введите пароль">
+        </div>
+        <div class="form-group">
+            <button onclick="createUser()">Создать пользователя</button>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Обновить пользователя</h2>
+        <div class="form-group">
+            <label for="update-userid">ID пользователя</label>
+            <input type="number" id="update-userid" placeholder="Введите ID пользователя">
+        </div>
+        <div class="form-group">
+            <label for="update-username">Имя пользователя</label>
+            <input type="text" id="update-username" placeholder="Введите имя пользователя">
+        </div>
+        <div class="form-group">
+            <label for="update-email">Email</label>
+            <input type="email" id="update-email" placeholder="Введите email">
+        </div>
+        <div class="form-group">
+            <label for="update-fullname">Полное имя</label>
+            <input type="text" id="update-fullname" placeholder="Введите полное имя">
+        </div>
+        <div class="form-group">
+            <label for="update-password">Пароль</label>
+            <input type="password" id="update-password" placeholder="Введите пароль">
+        </div>
+        <div class="form-group">
+            <button onclick="updateUser()">Обновить пользователя</button>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Удалить пользователя</h2>
+        <div class="form-group">
+            <label for="delete-userid">ID пользователя</label>
+            <input type="number" id="delete-userid" placeholder="Введите ID пользователя">
+        </div>
+        <div class="form-group">
+            <button onclick="deleteUser()">Удалить пользователя</button>
+        </div>
+    </div>
+    <script>
+        async function createUser() {
+            const username = document.getElementById('create-username').value;
+            const email = document.getElementById('create-email').value;
+            const fullname = document.getElementById('create-fullname').value;
+            const password = document.getElementById('create-password').value;
+
+            const response = await fetch('/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    full_name: fullname,
+                    password: password
+                })
+            });
+
+            if (response.ok) {
+                alert('Пользователь успешно создан!');
+            } else {
+                alert('Не удалось создать пользователя.');
+            }
+        }
+
+        async function updateUser() {
+            const userid = document.getElementById('update-userid').value;
+            const username = document.getElementById('update-username').value;
+            const email = document.getElementById('update-email').value;
+            const fullname = document.getElementById('update-fullname').value;
+            const password = document.getElementById('update-password').value;
+
+            const response = await fetch(`/users/${userid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    full_name: fullname,
+                    password: password
+                })
+            });
+
+            if (response.ok) {
+                alert('Пользователь успешно обновлен!');
+            } else {
+                alert('Не удалось обновить пользователя.');
+            }
+        }
+
+        async function deleteUser() {
+            const userid = document.getElementById('delete-userid').value;
+
+            const response = await fetch(`/users/${userid}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Пользователь успешно удален!');
+            } else {
+                alert('Не удалось удалить пользователя.');
+            }
+        }
+    </script>
+</body>
+</html>
